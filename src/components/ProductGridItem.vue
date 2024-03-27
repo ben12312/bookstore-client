@@ -5,18 +5,19 @@
             max-width="400"
         >
             <v-img
-                    class="white--text align-end"
-                    height="200px"
-                    src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                class="white--text align-end"
+                height="370px"
+                :src="item.cover_image"
             >
-                <v-card-title v-text="item.title" />
             </v-img>
+            <v-card-title v-text="item.title" />
 
-            <v-card-subtitle class="pb-0" v-text="item.author" />
+            <v-card-subtitle class="pb-0" v-text="item.writer" />
 
             <v-card-text class="text--primary">
-                <div>Price: ${{item.price}}</div>
+                <div>Price: {{item.point}} points</div>
             </v-card-text>
+            <v-card-subtitle v-text="'Tag : '+item.tag" />
 
             <v-card-actions>
                 <v-btn

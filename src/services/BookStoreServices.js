@@ -1,5 +1,5 @@
 import {isEmpty} from "../utils/helpers";
-
+import axios from "axios";
 
 export default class BookStoreServices {
     ID_LAST = 4;
@@ -10,28 +10,28 @@ export default class BookStoreServices {
             title: 'Vue.js in Action',
             author: 'Benjamin Listwon, Erik Hanchett',
             price: 45,
-            inStock: 5
+            instock: 5
         },
         {
             id: 2,
             title: 'Vue.js 2 Cookbook',
             author: 'Andrea Passaglia',
             price: 20,
-            inStock: 5
+            instock: 5
         },
         {
             id: 3,
             title: 'Vue.js: Up and Running: Building Accessible and Performant Web Apps',
             author: 'Callum Macrae',
             price: 22,
-            inStock: 5
+            instock: 5
         },
         {
             id: 4,
             title: 'Learning Vue.js 2',
             author: 'Olga Filipova',
             price: 35,
-            inStock: 5
+            instock: 5
         },
     ];
 
@@ -43,53 +43,48 @@ export default class BookStoreServices {
             isAdmin: true
         },
         {
-            id: 1,
+            id: 2,
             login: 'User',
             password: 'User',
             isAdmin: false
         },
     ]
 
-    getBooks() {
-        //imitation real server request
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                if (Math.random() > 0.8) { //set error 20%
-                    reject(new Error('Something bad happened'));
-                } else {
-                    resolve(this.booksData);
-                }
-            }, 700);
-        });
+    async getBooks() {
+        try {
+            let books = await axios.get(`${process.env.VUE_APP_BASE_URL}/books/get`);
+            return books.data
+        } catch (error) {
+            console.log(error);
+            return []
+        }
     }
 
-    storeBook(data) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                const errors = this._validateBook(data);
-                if (isEmpty(errors)) {
-                    data.id = ++this.ID_LAST;
-                    resolve(data);
-                } else {
-                    reject(errors);
-                }
-            }, 1000);
-        });
+    async storeBook(payload) {
+        try {
+            const errors = this._validateBook(payload);
+            if (isEmpty(errors)) {
+                payload.id = ++this.ID_LAST;
+                let books = await axios.post(`${process.env.VUE_APP_BASE_URL}/books/post`, payload);
+                return books.data
+            } else {
+                return(errors);
+            }
+        } catch (error) {
+            console.log(error);
+            return []
+        }
     }
 
     login(data) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                const result = this._validateUser(data);
-
-                if (result.success) {
-                    resolve(result);
-                } else {
-                    reject(result);
-                }
-
-
-            }, 700);
+        return new Promise(async(resolve, reject) => {
+            // setTimeout(async() => {}, 700);
+            const result = await this._validateUser(data);
+            if (result.success) {
+                resolve(result);
+            } else {
+                reject(result);
+            }
         });
     }
 
@@ -103,53 +98,55 @@ export default class BookStoreServices {
 
     _validateBook(data) {
         let errors = {};
-        if (isEmpty(data.title)) {
-            errors.title = 'Title field is required';
-        }
-        if (isEmpty(data.author)) {
-            errors.author = 'Author field is required';
-        }
-        if (isEmpty(data.price)) {
-            errors.price = 'Price field is required';
-        }
-        if (isEmpty(data.inStock)) {
-            errors.inStock = 'In Stock field is required';
-        }
+        if (isEmpty(data.title)) errors.title = 'Title field is required';
+        if (isEmpty(data.author)) errors.author = 'Author field is required';
+        if (isEmpty(data.price)) errors.price = 'Price field is required';
+        if (isEmpty(data.instock)) errors.instock = 'In Stock field is required';
 
         return errors;
     }
 
-
     _validateUser(data) {
         const {login = '', password = ''} = data;
         let errors = {};
-        if (isEmpty(login)) {
-            errors.login = 'Login field is required'
-        }
-        if (isEmpty(password)) {
-            errors.password = 'Password field is required'
-        }
+        if (isEmpty(login)) errors.login = 'Login field is required'
+        if (isEmpty(password)) errors.password = 'Password field is required'
 
         if (password.length && login.length) {
-            const user = this.userData.find((user) => user.login.toLowerCase() === data.login.toLowerCase());
-
-            if (user) {
-                if (user.password.toLowerCase() === data.password.toLowerCase()) {
-                    return {
-                        success: true,
-                        data: user
+            return new Promise((resolve, reject) => {
+                axios.get(`${process.env.VUE_APP_BASE_URL}/users/get?username=${login}`)
+                .then(user => {
+                    if (user && user.data && user.data != '') {
+                        if (user.data.password.toLowerCase() === data.password.toLowerCase()) {
+                            return resolve({
+                                success: true,
+                                data: user.data
+                            })
+                        } else {
+                            errors.password = 'Login or password incorrect'
+                        }
+                    } else {
+                        errors.password = 'User does not exist'
                     }
-                } else {
-                    errors.password = 'Login or password incorrect'
-                }
-            } else {
-                errors.password = 'User does not exist'
+                    resolve({
+                        success: false,
+                        data: errors
+                    })
+                })
+                .catch(err => {
+                    console.log(err);
+                    reject()
+                    resolve({
+                        success: false,
+                        data: err
+                    })
+                })
+            })
+        } else {
+            return {
+                success: false,
+                data: errors
             }
-        }
-
-        return {
-            success: false,
-            data: errors
         }
     }
 }

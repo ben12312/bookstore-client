@@ -15,7 +15,7 @@ export default {
         BOOK_BY_ID: (state) => (id) => state.items.find(item => item.id === id),
         IN_STOCK: (state, getters) => (id, buyCount) => {
             const book = getters.BOOK_BY_ID(id);
-            return book.inStock > buyCount;
+            return book.instock > buyCount;
         },
         ERRORS: (state) => state.error,
         ERROR_BY_KEY: (state) => (field, defaultValue = '') => objectGet(state, `error.${field}`, defaultValue),
@@ -45,6 +45,7 @@ export default {
             state.items.push(payload);
             state.isLoading = false;
             state.error = null;
+            this.$router.push('/')
         },
         STORE_BOOKS_ERROR: (state, payload) => {
             state.isLoading = false;
@@ -80,5 +81,6 @@ export default {
                     commit('STORE_BOOKS_ERROR', error);
                 });
         },
+
     }
 };

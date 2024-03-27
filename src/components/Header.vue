@@ -10,14 +10,16 @@
 
             <v-spacer></v-spacer>
 
-            <v-toolbar-items>
+            <v-toolbar-items v-if="IS_ADMIN">
                 <v-btn text tile :to="{name: 'add-book'}">
                     <v-icon left>mdi-pencil</v-icon> Add Book
                 </v-btn>
             </v-toolbar-items>
 
-            <v-spacer></v-spacer>
-
+            <!-- <v-spacer></v-spacer> -->
+            <v-toolbar-items>
+                <v-btn text v-if="USER">Order</v-btn>
+            </v-toolbar-items>
             <v-btn icon :to="{name: 'cart'}">
                 <v-badge top color="green">
                     <span slot="badge">{{ITEMS_TOTAL_COUNT}}</span>
@@ -27,7 +29,7 @@
 
             <v-toolbar-items>
                 <v-btn text v-if="IS_GUEST" @click="toggleLoginDialogVisibility">Login</v-btn>
-                <v-btn text v-if="!IS_GUEST" @click="LOGOUT_USER">Logout</v-btn>
+                <v-btn text v-if="!IS_GUEST" @click="logoutBtn()">Logout</v-btn>
             </v-toolbar-items>
         </v-toolbar>
         <LoginDialog :dialogVisible="loginDialog" @close="toggleLoginDialogVisibility"/>
@@ -46,7 +48,8 @@ export default {
     computed: {
         ...mapGetters('Account', [
             'IS_GUEST',
-            'IS_ADMIN'
+            'IS_ADMIN',
+            'USER'
         ]),
         ...mapGetters('Cart', [
             'ITEMS_TOTAL_COUNT',
@@ -61,8 +64,16 @@ export default {
         ...mapActions('Account', [
             'LOGOUT_USER'
         ]),
+        ...mapActions('Cart', [
+            'CLEAR_BOOKS'
+        ]),
         toggleLoginDialogVisibility() {
             this.loginDialog = !this.loginDialog;
+        },
+        logoutBtn() {
+            this.LOGOUT_USER()
+            this.CLEAR_BOOKS()
+
         }
     }
 }

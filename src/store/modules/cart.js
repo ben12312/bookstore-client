@@ -36,7 +36,7 @@ const updateCartItem = (book, item = {}, quantity) => {
         id,
         title,
         count: count + quantity,
-        total: total + quantity * book.price
+        total: total + quantity * book.point
     };
 };
 
@@ -84,6 +84,10 @@ export default {
             state.items = items;
             state.orderTotal = orderTotal;
         },
+        EMPTY_BOOKS: (state) => {
+            state.items = []
+            state.orderTotal = 0
+        }
     },
     actions: {
         BOOK_ADDED_TO_CART: async ( {commit, rootGetters, getters}, bookId) => {
@@ -112,5 +116,8 @@ export default {
             const item = state.items.find(({id}) => id === bookId);
             commit('UPDATE_CART_ITEM', {book, quantity: -item.count});
         },
+        CLEAR_BOOKS: async({commit}) => {
+            commit('EMPTY_BOOKS');
+        }
     }
 };

@@ -33,10 +33,29 @@
                 <v-col cols="12">
                     <v-text-field
                             label="In Stock count*"
-                            v-model="payload.inStock"
+                            v-model="payload.instock"
                             type="number"
                             required
-                            :error-messages="ERROR_BY_KEY('inStock')"
+                            :error-messages="ERROR_BY_KEY('instock')"
+                    ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                    <v-select
+                        label="Tag"
+                        v-model="payload.tag"
+                        :items="['Fiction', 'Non-Fiction', 'Science', 'Essay']"
+                        required
+                        :error-messages="ERROR_BY_KEY('tag')"
+                    ></v-select>
+                </v-col>
+                <v-col cols="12">
+                    <v-text-field
+                            label="Cover Image*"
+                            v-model="payload.cover_image"
+                            type="file"
+                            required
+                            accept="image/png, image/gif, image/jpeg"
+                            :error-messages="ERROR_BY_KEY('cover_image')"
                     ></v-text-field>
                 </v-col>
             </v-card-text>

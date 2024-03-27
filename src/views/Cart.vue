@@ -18,10 +18,10 @@
                     <td class="text-center">
                         <v-btn-toggle>
                             <v-btn outlined fab small color="primary" @click="BOOK_REMOVED_FROM_CART(item.id)">
-                                <v-icon>mdi-numeric-negative-1</v-icon>
+                                <h1>-</h1>
                             </v-btn>
                             <v-btn outlined  fab small color="primary"  @click="BOOK_ADDED_TO_CART(item.id)" :disabled="!IS_IN_STOCK(item.id)">
-                                <v-icon>mdi-plus-one</v-icon>
+                                <h1>+</h1>
                             </v-btn>
                             <v-btn outlined color="error" fab small @click="ALL_BOOKS_REMOVED_FROM_CART(item.id)">
                                 <v-icon>mdi-trash-can-outline</v-icon>
@@ -34,6 +34,9 @@
                     <td></td>
                 </tr>
                 </tbody>
+                <div style="float: right;">
+                    <v-btn color="blue darken-1" v-if="USER" text @click="orderButton()">Order</v-btn>
+                </div>
             </template>
         </v-simple-table>
         <p v-else>Cart is empty</p>
@@ -42,23 +45,41 @@
 
 <script>
     import {mapActions, mapGetters} from "vuex";
+    import axios from "axios";
 
     export default {
         name: "Cart",
-
         computed: {
             ...mapGetters('Cart', [
                 'ITEMS',
                 'ORDER_TOTAL',
                 'IS_IN_STOCK'
             ]),
+            ...mapGetters('Account', [
+                'USER'
+            ]),
         },
         methods: {
             ...mapActions('Cart', [
                 'BOOK_ADDED_TO_CART',
                 'BOOK_REMOVED_FROM_CART',
-                'ALL_BOOKS_REMOVED_FROM_CART'
+                'ALL_BOOKS_REMOVED_FROM_CART',
+                'CLEAR_BOOKS'
             ]),
+            async orderButton() {
+                let items = this.ITEMS
+                let userLogin = this.USER;
+                try {
+                    await axios.post(`${process.env.VUE_APP_BASE_URL}/user-book/order`, {
+                        userId: userLogin.id,
+                        books: items
+                    });
+                    this.CLEAR_BOOKS()
+                    this.$router.push('/')
+                } catch (error) {
+                    console.log(error);
+                }
+            }
         }
     }
 </script>

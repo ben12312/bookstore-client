@@ -4,10 +4,10 @@
             {{item.title}}
         </td>
         <td>
-            {{item.price}}
+            {{item.point}}
         </td>
         <td>
-            {{item.author}}
+            {{item.writer}}
         </td>
         <td>
             <v-btn

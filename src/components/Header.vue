@@ -32,7 +32,11 @@
                 <v-btn text v-if="!IS_GUEST" @click="logoutBtn()">Logout</v-btn>
             </v-toolbar-items>
         </v-toolbar>
+
         <LoginDialog :dialogVisible="loginDialog" @close="toggleLoginDialogVisibility"/>
+        <v-btn style="float: right;" text>
+            <div class="text-right" style="margin-right: 20px;">You have <span style="color: blue">{{USER.point}}</span> Pts</div>
+        </v-btn>
     </div>
 </template>
 
@@ -73,7 +77,7 @@ export default {
         logoutBtn() {
             this.LOGOUT_USER()
             this.CLEAR_BOOKS()
-
+            this.$router.push('/')
         }
     }
 }

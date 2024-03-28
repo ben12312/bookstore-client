@@ -15,7 +15,7 @@ export default {
         ERRORS: state => state.errors,
         USER: state => state.user,
         IS_GUEST: state => state.user === null,
-        IS_ADMIN: state => objectGet(state, 'user.isAdmin', false),
+        IS_ADMIN: state => objectGet(state, 'user.isadmin', false),
         ERROR_BY_KEY: (state) => (field, defaultValue = '') => objectGet(state, `errors.${field}`, defaultValue),
     },
     mutations: {

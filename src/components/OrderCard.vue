@@ -30,6 +30,14 @@
                 >
                     Payment
                 </v-btn>
+                <v-btn
+                    color="red"
+                    text
+                    v-if="USER && item.status == 'Order'"
+                    @click="cancelButton(item)"
+                >
+                    Cancel
+                </v-btn>
             </v-card-actions>
         </v-card>
         <v-dialog v-model="intDialogVisible" scrollable max-width="500px">
@@ -70,20 +78,28 @@
             ]),
         },
         methods: {
-            // ...mapActions('Cart', [
-            //     'BOOK_ADDED_TO_CART'
-            // ]),
             showDialogPayment() {
                 this.intDialogVisible = true;
             },
             async paymentButton(item) {
                 let userLogin = this.USER;
                 try {
-                    let resPayBook = await axios.post(`${process.env.VUE_APP_BASE_URL}/user-book/pay`, {
+                    await axios.post(`${process.env.VUE_APP_BASE_URL}/user-book/pay`, {
                         userId: userLogin.id,
                         book: item
                     });
-                    console.log(resPayBook);
+                    this.$router.push('/')
+                } catch (error) {
+                    console.log(error);
+                }
+            },
+            async cancelButton(item) {
+                let userLogin = this.USER;
+                try {
+                    await axios.post(`${process.env.VUE_APP_BASE_URL}/user-book/cancel`, {
+                        userId: userLogin.id,
+                        book: item
+                    });
                     this.$router.push('/')
                 } catch (error) {
                     console.log(error);

@@ -45,12 +45,14 @@
     import ProductGridItem from "./ProductGridItem";
     import ProductTableItem from "./ProductTableItem";
     import {mapActions} from "vuex";
+    import axios from 'axios';
 
     export default {
         name: "Products",
         data() {
             return {
-                listType: 'grid'
+                listType: 'grid',
+                page: 1
             }
         },
         components: {
@@ -66,12 +68,18 @@
         methods: {
             ...mapActions({
                 getBooks: 'Books/GET_BOOKS',
+                storeBooks: 'Books/STORE_BOOKS_PER10_ACT'
             }),
             changeViewList(type) {
                 this.$set(this, 'listType', type);
             },
-            loadMoreBooks() {
-                
+            async loadMoreBooks() {
+                this.page = this.page + 1 // create store page and get from store
+                let books = await axios.get(`${process.env.VUE_APP_BASE_URL}/books/get?page=${this.page}`);
+                for (let index = 0; index < books.data.length; index++) {
+                    const element = books.data[index];
+                    this.storeBooks(element)
+                }
             }
         },
 

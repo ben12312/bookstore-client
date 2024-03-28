@@ -51,8 +51,9 @@ export default {
             state.error = payload;
         },
         STORE_BOOKS_PER10: (state, payload) => {
-            state.items.push(payload)
-            console.log(state);
+            state.items.push(payload);
+            state.isLoading = false;
+            state.error = null;
         }
     },
     actions: {

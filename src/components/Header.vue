@@ -2,10 +2,10 @@
     <div class="toolbar">
         <v-toolbar dark color="primary">
             <router-link to="/">
-                <img src="@/assets/logo.svg" height="40"/>
+                <img src="@/assets/images.jpg" height="40"/>
             </router-link>
             <v-toolbar-title color="light">
-                BookStore
+                <router-link to="/"><v-btn text>BookStore</v-btn></router-link>
             </v-toolbar-title>
 
             <v-spacer></v-spacer>

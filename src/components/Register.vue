@@ -91,6 +91,7 @@
                     const errors = this.ERRORS;
                     if (errors == null) this.$set(this, 'intDialogVisible', false)
                     await axios.post(`${process.env.VUE_APP_BASE_URL}/users/register`, this.payload );
+                    this.intDialogVisible = false;
                 }
             }
         }

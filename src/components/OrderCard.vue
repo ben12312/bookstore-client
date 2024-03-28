@@ -12,30 +12,22 @@
             </v-img>
             <v-card-title v-text="item.title" />
 
-            <v-card-subtitle class="pb-0" v-text="item.writer" />
+            <v-card-subtitle class="pb-0" v-text="`Pay $${item.total_price} For ${item.count} Pcs`" />
 
             <v-card-text class="text--primary">
-                <div>Price: {{item.point}} points</div>
+                <div>Status: {{item.status}}</div>
             </v-card-text>
-            <v-card-subtitle v-text="'Tag : '+item.tag" />
+
+            <v-card-subtitle v-if="item.status == 'Order'" v-text="`Please complete payment`" />
 
             <v-card-actions>
                 <v-btn
                     color="orange"
                     text
-                    @click="BOOK_ADDED_TO_CART(item.id)"
-                    v-if="IS_IN_STOCK(item.id) && USER"
+                    @click="paymentButton(item.id)"
+                    v-if="USER"
                 >
-                    Add to cart
-                </v-btn>
-
-                <v-btn
-                    color="orange"
-                    text
-                    disabled
-                    v-if="!IS_IN_STOCK(item.id)"
-                >
-                    Out of stock
+                    Payment
                 </v-btn>
             </v-card-actions>
         </v-card>
@@ -43,28 +35,27 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from "vuex";
+    import { mapGetters} from "vuex";
 
     export default {
         name: "ProductGridItem",
         props: ['item'],
         computed: {
-            ...mapGetters('Cart', [
-                'ITEMS_COUNT_BY_ID',
-                'IS_IN_STOCK'
-            ]),
             ...mapGetters('Account', [
                 'USER'
             ]),
         },
         methods: {
-            ...mapActions('Cart', [
-                'BOOK_ADDED_TO_CART'
-            ])
+            // ...mapActions('Cart', [
+            //     'BOOK_ADDED_TO_CART'
+            // ]),
+            paymentButton() {
+                
+            }
         }
     }
 </script>
 
 <style scoped>
 
-</style>
+</style>    

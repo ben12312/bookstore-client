@@ -18,7 +18,7 @@
 
             <!-- <v-spacer></v-spacer> -->
             <v-toolbar-items>
-                <v-btn text v-if="USER">Order</v-btn>
+                <v-btn text v-if="USER" :to="{name: 'order'}">Order</v-btn>
             </v-toolbar-items>
             <v-btn icon :to="{name: 'cart'}">
                 <v-badge top color="green">

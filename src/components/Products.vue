@@ -34,6 +34,9 @@
                         :key="'list' + item.id"/>
             </template>
         </v-simple-table>
+        <div style="text-align: center; padding-top: 50px;">
+            <v-btn @click="loadMoreBooks">Load more</v-btn>
+        </div>
     </div>
 </template>
 
@@ -66,6 +69,9 @@
             }),
             changeViewList(type) {
                 this.$set(this, 'listType', type);
+            },
+            loadMoreBooks() {
+                
             }
         },
 

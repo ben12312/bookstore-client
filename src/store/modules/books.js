@@ -45,12 +45,15 @@ export default {
             state.items.push(payload);
             state.isLoading = false;
             state.error = null;
-            this.$router.push('/')
         },
         STORE_BOOKS_ERROR: (state, payload) => {
             state.isLoading = false;
             state.error = payload;
         },
+        STORE_BOOKS_PER10: (state, payload) => {
+            state.items.push(payload)
+            console.log(state);
+        }
     },
     actions: {
         GET_BOOKS: async ({commit}) => {
@@ -82,5 +85,8 @@ export default {
                 });
         },
 
+        STORE_BOOKS_PER10_ACT: async ({commit}, payload) => {
+            commit('STORE_BOOKS_PER10', payload);
+        }
     }
 };

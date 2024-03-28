@@ -35,7 +35,7 @@
 
         <LoginDialog :dialogVisible="loginDialog" @close="toggleLoginDialogVisibility"/>
         <v-btn style="float: right;" text>
-            <div class="text-right" style="margin-right: 20px;">You have <span style="color: blue">{{USER.point}}</span> Pts</div>
+            <div class="text-right" style="margin-right: 20px;">You have <span style="color: blue">{{USER ? USER.point : 0}}</span> Pts</div>
         </v-btn>
     </div>
 </template>

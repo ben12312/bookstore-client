@@ -61,7 +61,7 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="STORE_BOOKS(payload)">Submit</v-btn>
+                <v-btn color="blue darken-1" text @click="createBooks(payload)">Submit</v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -87,7 +87,11 @@
         methods: {
             ...mapActions('Books', [
                 'STORE_BOOKS'
-            ])
+            ]),
+            async createBooks(payload) {
+                await this.STORE_BOOKS(payload);
+                this.$router.push('/');
+            }
         }
     }
 </script>

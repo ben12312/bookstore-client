@@ -4,52 +4,6 @@ import axios from "axios";
 export default class BookStoreServices {
     ID_LAST = 4;
 
-    booksData = [
-        {
-            id: 1,
-            title: 'Vue.js in Action',
-            author: 'Benjamin Listwon, Erik Hanchett',
-            price: 45,
-            instock: 5
-        },
-        {
-            id: 2,
-            title: 'Vue.js 2 Cookbook',
-            author: 'Andrea Passaglia',
-            price: 20,
-            instock: 5
-        },
-        {
-            id: 3,
-            title: 'Vue.js: Up and Running: Building Accessible and Performant Web Apps',
-            author: 'Callum Macrae',
-            price: 22,
-            instock: 5
-        },
-        {
-            id: 4,
-            title: 'Learning Vue.js 2',
-            author: 'Olga Filipova',
-            price: 35,
-            instock: 5
-        },
-    ];
-
-    userData = [
-        {
-            id: 1,
-            login: 'Admin',
-            password: 'Admin',
-            isAdmin: true
-        },
-        {
-            id: 2,
-            login: 'User',
-            password: 'User',
-            isAdmin: false
-        },
-    ]
-
     async getBooks() {
         try {
             let books = await axios.get(`${process.env.VUE_APP_BASE_URL}/books/get`);
